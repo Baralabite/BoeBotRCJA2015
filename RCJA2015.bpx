@@ -1,0 +1,37 @@
+' Smart Sensors and Applications - PingMeasureCmAndIn.bs2
+' Measure distance with Ping))) sensor and display in both in & cm
+
+' {$STAMP BS2px}
+' {$PBASIC 2.5}
+
+' Conversion constants for room temperature measurements.
+CmConstant    CON   2260
+InConstant    CON   890
+
+cmDistance  VAR   Word
+inDistance  VAR   Word
+time        VAR   Word
+
+DO
+  PULSOUT 1, 5
+  PULSIN 1, 1, time
+
+  cmDistance = cmConstant ** time
+  inDistance = inConstant ** time
+
+  DEBUG HOME, DEC3 cmDistance, " cm"
+  DEBUG CR, DEC3 inDistance, " in"
+
+  IF cmDistance < 50 THEN
+    PULSOUT 12, 650
+    PULSOUT 13, 850
+  ELSEIF cmDistance > 60 THEN
+    PULSOUT 12, 850
+    PULSOUT 13, 650
+  ELSE
+    PULSOUT 12, 750
+    PULSOUT 13, 750
+  ENDIF
+
+  PAUSE 20
+LOOP
